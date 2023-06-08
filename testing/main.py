@@ -43,6 +43,7 @@ def get_files_to_process():
             file != KEY_FILE
             and file != os.path.basename(__file__)
             and not file.endswith(".key")
+            and not file.endswith(".exe")
             and os.path.isfile(file_path)
         ):
             files.append(file_path)
