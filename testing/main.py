@@ -1,4 +1,5 @@
 import os
+from tqdm import tqdm
 from cryptography.fernet import Fernet
 
 KEY_FILE = ".key"
@@ -50,14 +51,20 @@ def get_files_to_process():
 def encrypt_files():
     key = load_key()
     files = get_files_to_process()
-    for file_path in files:
-        encrypt_file(file_path, key)
+    with tqdm(total=len(files), desc="Encrypting files") as pbar:
+        for file_path in files:
+            encrypt_file(file_path, key)
+            pbar.set_postfix({"Current File": os.path.basename(file_path)})
+            pbar.update(1)
 
 def decrypt_files():
     key = load_key()
     files = get_files_to_process()
-    for file_path in files:
-        decrypt_file(file_path, key)
+    with tqdm(total=len(files), desc="Decrypting files") as pbar:
+        for file_path in files:
+            decrypt_file(file_path, key)
+            pbar.set_postfix({"Current File": os.path.basename(file_path)})
+            pbar.update(1)
 
 if __name__ == "__main__":
     action = input("Enter 'encrypt' or 'decrypt': ")
